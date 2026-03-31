@@ -26,4 +26,11 @@ app.use("/api/analytics", analyticsRoutes);
 
 app.use("/api/track", trackingRoutes);
 
+app.get("/", (req, res) => {
+  res.status(200).json({
+    status: "OK",
+    message: "Ecommerce Tracking API is running 🚀"
+  });
+});
+
 module.exports = app;
