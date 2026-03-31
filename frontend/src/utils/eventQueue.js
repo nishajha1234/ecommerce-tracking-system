@@ -1,7 +1,10 @@
+const API = import.meta.env.VITE_API_URL;
+
 let queue = [];
 let isFlushing = false;
+let started = false;
 
-// ✅ SESSION HANDLING
+/* ================= SESSION ================= */
 const getSessionId = () => {
   let sessionId = localStorage.getItem("sessionId");
 
@@ -13,7 +16,7 @@ const getSessionId = () => {
   return sessionId;
 };
 
-// ✅ PUSH EVENT
+/* ================= PUSH EVENT ================= */
 export const pushEvent = (event) => {
   const sessionId = getSessionId();
 
@@ -24,17 +27,17 @@ export const pushEvent = (event) => {
   });
 };
 
-// ✅ SAFE FLUSH (NO DATA LOSS)
+/* ================= SAFE FLUSH ================= */
 export const flushQueue = async () => {
   if (queue.length === 0 || isFlushing) return;
 
   isFlushing = true;
 
-  const eventsToSend = [...queue]; // copy
-  queue = []; // clear immediately (optimistic)
+  const eventsToSend = [...queue];
+  queue = [];
 
   try {
-    await fetch("http://localhost:5000/api/track/batch", {
+    await fetch(`${API}/api/track/batch`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -44,19 +47,23 @@ export const flushQueue = async () => {
   } catch (err) {
     console.error("Batch send failed", err);
 
-    // ❗ restore events if failed
+    // restore if failed
     queue = [...eventsToSend, ...queue];
   } finally {
     isFlushing = false;
   }
 };
 
-// ✅ HANDLE TAB CLOSE / BACKGROUND (CRITICAL FIX)
+/* ================= VISIBILITY HANDLER ================= */
 const handleVisibilityChange = () => {
-  if (document.visibilityState === "hidden" && queue.length > 0 && !isFlushing) {
+  if (
+    document.visibilityState === "hidden" &&
+    queue.length > 0 &&
+    !isFlushing
+  ) {
     try {
       navigator.sendBeacon(
-        "http://localhost:5000/api/track/batch",
+        `${API}/api/track/batch`,
         JSON.stringify({ events: queue })
       );
       queue = [];
@@ -66,9 +73,7 @@ const handleVisibilityChange = () => {
   }
 };
 
-// ✅ START ONLY ONCE
-let started = false;
-
+/* ================= START PROCESSOR ================= */
 export const startQueueProcessor = () => {
   if (started) return;
 
@@ -76,6 +81,5 @@ export const startQueueProcessor = () => {
 
   setInterval(flushQueue, 5000);
 
-  // ✅ attach once
   document.addEventListener("visibilitychange", handleVisibilityChange);
 };

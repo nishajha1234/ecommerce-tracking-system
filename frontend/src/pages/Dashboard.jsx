@@ -13,12 +13,13 @@ import { flushQueue } from "../utils/eventQueue";
 export default function Dashboard() {
   const [data, setData] = useState(null);
   const [showAllProducts, setShowAllProducts] = useState(false);
+  const API = import.meta.env.VITE_API_URL;
 
   const fetchAnalytics = async () => {
     try {
       await flushQueue();
 
-      const res = await axios.get("http://localhost:5000/api/analytics", {
+      const res = await axios.get(`${API}/api/analytics`, {
         headers: { "Cache-Control": "no-cache" }
       });
 

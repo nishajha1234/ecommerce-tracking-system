@@ -1,19 +1,25 @@
 import axios from "axios";
 
-const API = "http://localhost:5000/api/track";
+/* ================= ENV API ================= */
+const API = import.meta.env.VITE_API_URL;
 
+/* ================= STATE ================= */
 let queue = [];
 let isFlushing = false;
 
-// ✅ Stable session handling
-let sessionId = localStorage.getItem("sessionId");
+/* ================= SESSION ================= */
+const getSessionId = () => {
+  let sessionId = localStorage.getItem("sessionId");
 
-if (!sessionId) {
-  sessionId = Date.now().toString();
-  localStorage.setItem("sessionId", sessionId);
-}
+  if (!sessionId) {
+    sessionId = crypto.randomUUID(); // ✅ better than Date.now
+    localStorage.setItem("sessionId", sessionId);
+  }
 
-// ✅ Flush logic (safe + retry)
+  return sessionId;
+};
+
+/* ================= FLUSH ================= */
 const flushQueue = async () => {
   if (queue.length === 0 || isFlushing) return;
 
@@ -24,7 +30,7 @@ const flushQueue = async () => {
 
   try {
     await axios.post(
-      `${API}/batch`,
+      `${API}/api/track/batch`, // ✅ fixed URL
       { events: eventsToSend },
       {
         headers: {
@@ -42,17 +48,21 @@ const flushQueue = async () => {
   }
 };
 
-// ✅ Prevent multiple intervals (React strict mode safe)
+/* ================= INTERVAL ================= */
 if (!window.__trackingInterval) {
   window.__trackingInterval = setInterval(flushQueue, 5000);
 }
 
-// ✅ Reliable flush on tab close (better than beforeunload)
+/* ================= TAB CLOSE / BACKGROUND ================= */
 window.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "hidden" && queue.length > 0) {
+  if (
+    document.visibilityState === "hidden" &&
+    queue.length > 0 &&
+    !isFlushing
+  ) {
     try {
       navigator.sendBeacon(
-        `${API}/batch`,
+        `${API}/api/track/batch`, // ✅ fixed URL
         JSON.stringify({ events: queue })
       );
       queue = [];
@@ -62,8 +72,10 @@ window.addEventListener("visibilitychange", () => {
   }
 });
 
-// ✅ Public function
+/* ================= PUBLIC FUNCTION ================= */
 export const trackEvent = (event) => {
+  const sessionId = getSessionId();
+
   queue.push({
     ...event,
     sessionId,
