@@ -10,7 +10,6 @@ import {
   Cell
 } from "recharts";
 
-/* 🔥 FORMAT FUNCTION */
 const formatName = (name) => {
   const map = {
     "Wireless Headphones": "Headphones",
@@ -22,11 +21,9 @@ const formatName = (name) => {
     "Laptop Stand": "Stand",
     "USB-C Hub": "Hub"
   };
-
   return map[name] || name;
 };
 
-/* 🎨 COLORS */
 const COLORS = ["#6366f1", "#ec4899", "#f97316", "#ef4444", "#8b5cf6"];
 const PAGE_COLORS = ["#0ea5e9", "#14b8a6", "#84cc16"];
 
@@ -43,57 +40,55 @@ export function ProductChart({ data = [] }) {
 
   return (
     <ChartCard>
-      <ResponsiveContainer width="100%" height={260}>
-        <BarChart data={formattedData}>
-
-          <XAxis
-            dataKey="name"
-            tick={{ fill: "#000", fontSize: 13 }}
-            axisLine={false}
-            tickLine={false}
-          />
-
-          <YAxis
-            axisLine={false}
-            tickLine={false}
-            tick={{ fill: "#000" }}
-            label={{
-              value: "Views",
-              angle: -90,
-              position: "insideLeft",
-              style: {
-                textAnchor: "middle",
-                dominantBaseline: "central",
-                fontSize: 12,
-                fill: "#000"
-              }
-            }}
-          />
-
-          <Tooltip
-            cursor={{ fill: "transparent" }}
-            content={({ active, payload }) => {
-              if (active && payload?.length) {
-                const d = payload[0].payload;
-                return (
-                  <TooltipBox
-                    title={d.fullName}
-                    value={`Views: ${d.views}`}
-                  />
-                );
-              }
-              return null;
-            }}
-          />
-
-          <Bar dataKey="views" radius={[6, 6, 0, 0]}>
-            {formattedData.map((_, i) => (
-              <Cell key={i} fill={COLORS[i % COLORS.length]} />
-            ))}
-          </Bar>
-
-        </BarChart>
-      </ResponsiveContainer>
+      <div className="w-full h-[220px] sm:h-[260px]">
+        <ResponsiveContainer>
+          <BarChart data={formattedData}>
+            <XAxis
+              dataKey="name"
+              tick={{ fill: "#000", fontSize: 10 }}
+              className="sm:text-xs"
+              axisLine={false}
+              tickLine={false}
+            />
+            <YAxis
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "#000", fontSize: 10 }}
+              label={{
+                value: "Views",
+                angle: -90,
+                position: "insideLeft",
+                style: {
+                  textAnchor: "middle",
+                  dominantBaseline: "central",
+                  fontSize: 10,
+                  fill: "#000"
+                }
+              }}
+            />
+            <Tooltip
+              cursor={{ fill: "transparent" }}
+              content={({ active, payload }) => {
+                if (active && payload?.length) {
+                  const d = payload[0].payload;
+                  return (
+                    <TooltipBox
+                      title={d.fullName}
+                      value={`Views: ${d.views}`}
+                    />
+                  );
+                }
+                return null;
+              }}
+            />
+            <Bar dataKey="views" radius={[6, 6, 0, 0]}>
+              {formattedData.map((_, i) => (
+                <Cell key={i} fill={COLORS[i % COLORS.length]} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </ChartCard>
   );
 }
@@ -110,57 +105,54 @@ export function PageTimeChart({ data = [] }) {
 
   return (
     <ChartCard>
-      <ResponsiveContainer width="100%" height={260}>
-        <BarChart data={formatted}>
-
-          <XAxis
-            dataKey="name"
-            axisLine={false}
-            tickLine={false}
-            tick={{ fill: "#000" }}
-          />
-
-          <YAxis
-            axisLine={false}
-            tickLine={false}
-            tick={{ fill: "#000" }}
-            label={{
-              value: "Total Time (sec)",
-              angle: -90,
-              position: "insideLeft",
-              style: {
-                textAnchor: "middle",
-                dominantBaseline: "central",
-                fontSize: 12,
-                fill: "#000"
-              }
-            }}
-          />
-
-          <Tooltip
-            cursor={{ fill: "transparent" }}
-            content={({ active, payload }) => {
-              if (active && payload?.length) {
-                const d = payload[0].payload;
-                return (
-                  <TooltipBox
-                    title={d.name}
-                    value={`Time: ${d.time} sec`}
-                  />
-                );
-              }
-              return null;
-            }}
-          />
-
-          <Bar dataKey="time" radius={[6, 6, 0, 0]}>
-            {formatted.map((_, i) => (
-              <Cell key={i} fill={PAGE_COLORS[i % PAGE_COLORS.length]} />
-            ))}
-          </Bar>
-
-        </BarChart>
-      </ResponsiveContainer>
+      <div className="w-full h-[220px] sm:h-[260px]">
+        <ResponsiveContainer>
+          <BarChart data={formatted}>
+            <XAxis
+              dataKey="name"
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "#000", fontSize: 10 }}
+            />
+            <YAxis
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "#000", fontSize: 10 }}
+              label={{
+                value: "Total Time (sec)",
+                angle: -90,
+                position: "insideLeft",
+                style: {
+                  textAnchor: "middle",
+                  dominantBaseline: "central",
+                  fontSize: 10,
+                  fill: "#000"
+                }
+              }}
+            />
+            <Tooltip
+              cursor={{ fill: "transparent" }}
+              content={({ active, payload }) => {
+                if (active && payload?.length) {
+                  const d = payload[0].payload;
+                  return (
+                    <TooltipBox
+                      title={d.name}
+                      value={`Time: ${d.time} sec`}
+                    />
+                  );
+                }
+                return null;
+              }}
+            />
+            <Bar dataKey="time" radius={[6, 6, 0, 0]}>
+              {formatted.map((_, i) => (
+                <Cell key={i} fill={PAGE_COLORS[i % PAGE_COLORS.length]} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </ChartCard>
   );
 }
@@ -179,7 +171,7 @@ export function DropOffChart({ data = [] }) {
     <ChartCard>
       <div className="flex flex-col">
 
-        <div className="relative w-full h-[240px]">
+        <div className="relative w-full h-[200px] sm:h-[240px]">
           <ResponsiveContainer>
             <PieChart>
               <Pie
@@ -199,7 +191,7 @@ export function DropOffChart({ data = [] }) {
                 y="50%"
                 textAnchor="middle"
                 dominantBaseline="middle"
-                className="text-sm fill-gray-500"
+                className="text-xs sm:text-sm fill-gray-500"
               >
                 Drop-off
               </text>
@@ -207,15 +199,14 @@ export function DropOffChart({ data = [] }) {
           </ResponsiveContainer>
         </div>
 
-        {/* 🔥 CLEAN LEGEND */}
-        <div className="flex flex-wrap justify-center gap-3 mt-4">
+        <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mt-3 sm:mt-4">
           {formatted.map((entry, i) => (
             <div
               key={i}
-              className="flex items-center gap-2 text-xs text-gray-600 bg-gray-50 px-3 py-1.5 rounded-lg mb-4"
+              className="flex items-center gap-2 text-[10px] sm:text-xs text-gray-600 bg-gray-50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg"
             >
               <span
-                className="w-2.5 h-2.5 rounded-full"
+                className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full"
                 style={{ backgroundColor: COLORS[i % COLORS.length] }}
               />
               {entry.name} ({entry.value})
@@ -228,11 +219,11 @@ export function DropOffChart({ data = [] }) {
   );
 }
 
-/* ================= REUSABLE UI ================= */
+/* ================= UI ================= */
 
 function ChartCard({ children }) {
   return (
-    <div className="bg-white rounded-2xl border pt-4 px-4 shadow-sm hover:shadow-md transition">
+    <div className="bg-white rounded-xl sm:rounded-2xl border pt-3 sm:pt-4 px-3 sm:px-4 shadow-sm hover:shadow-md transition">
       {children}
     </div>
   );
@@ -240,7 +231,7 @@ function ChartCard({ children }) {
 
 function TooltipBox({ title, value }) {
   return (
-    <div className="bg-white p-3 rounded-lg shadow-md border text-sm">
+    <div className="bg-white p-2 sm:p-3 rounded-lg shadow-md border text-xs sm:text-sm">
       <p className="font-medium text-gray-800">{title}</p>
       <p className="text-gray-500">{value}</p>
     </div>
@@ -249,7 +240,7 @@ function TooltipBox({ title, value }) {
 
 function Empty({ title }) {
   return (
-    <div className="bg-white p-5 rounded-2xl text-center text-gray-400 border">
+    <div className="bg-white p-4 sm:p-5 rounded-xl sm:rounded-2xl text-center text-gray-400 border text-xs sm:text-sm">
       {title}
     </div>
   );
