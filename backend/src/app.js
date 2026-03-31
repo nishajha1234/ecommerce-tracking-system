@@ -6,7 +6,7 @@ const analyticsRoutes = require("./routes/analytics.routes");
 const trackingRoutes = require("./routes/tracking.routes");
 const allowedOrigins = [
   "http://localhost:5173", // local frontend
-  "https://your-app.vercel.app" // deployed frontend
+  "https://ecommerce-tracking-system.vercel.app" // deployed frontend
 ];
 
 const app = express();
