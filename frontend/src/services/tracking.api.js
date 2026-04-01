@@ -9,7 +9,7 @@ const getSessionId = () => {
   let sessionId = localStorage.getItem("sessionId");
 
   if (!sessionId) {
-    sessionId = crypto.randomUUID(); 
+    sessionId = crypto.randomUUID();
     localStorage.setItem("sessionId", sessionId);
   }
 
