@@ -8,13 +8,11 @@ export const useTracking = (page) => {
   const sentRef = useRef(false);
 
   useEffect(() => {
-    // ✅ Start queue ONLY once (important)
     if (!isQueueStarted) {
       startQueueProcessor();
       isQueueStarted = true;
     }
 
-    // ✅ Better session handling
     let sessionId = localStorage.getItem("sessionId");
 
     if (!sessionId) {
@@ -25,7 +23,6 @@ export const useTracking = (page) => {
     startTimeRef.current = Date.now();
     sentRef.current = false;
 
-    // ✅ PAGE VIEW
     pushEvent({
       eventType: "PAGE_VIEW",
       page,
@@ -51,12 +48,10 @@ export const useTracking = (page) => {
         sessionId
       });
 
-      // ✅ prevent duplicates
       sentRef.current = true;
       startTimeRef.current = null;
     };
 
-    // ✅ HANDLE TAB SWITCH / MINIMIZE (IMPORTANT FIX)
     const handleVisibilityChange = () => {
       if (document.hidden) {
         sendTimeSpent();

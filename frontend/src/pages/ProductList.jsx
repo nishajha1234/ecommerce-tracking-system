@@ -9,7 +9,6 @@ export default function Product() {
   return (
     <Layout>
 
-      {/* 🔷 HEADER */}
       <div className="mb-8 animate-fadeIn">
         <h1 className="text-2xl font-semibold text-gray-900">
           Products
@@ -19,7 +18,6 @@ export default function Product() {
         </p>
       </div>
 
-      {/* 🔷 GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
         {products.map((product, index) => (
@@ -32,8 +30,6 @@ animate-slideUp"
             style={{ animationDelay: `${index * 0.08}s` }}
           >
 
-            {/* Image */}
-
 <div className="aspect-[5/5] w-full overflow-hidden rounded-t-xl">
   <img
     src={product.image}
@@ -42,7 +38,6 @@ animate-slideUp"
   />
 </div>
 
-            {/* Content */}
             <div className="p-5">
               <h2 className="font-medium text-lg text-gray-900">
                 {product.name}

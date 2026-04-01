@@ -1,17 +1,12 @@
 const Event = require("../models/event.model");
 
-// ✅ Allowed event types (centralized)
 const VALID_EVENT_TYPES = ["PAGE_VIEW", "PRODUCT_VIEW", "TIME_SPENT"];
 
-/**
- * 🔹 SINGLE EVENT
- */
 const trackEvent = async (req, res) => {
   try {
     const { eventType, page, productId, duration } = req.body;
     const sessionId = req.headers["x-session-id"];
 
-    // ✅ Basic validation
     if (!eventType || !VALID_EVENT_TYPES.includes(eventType)) {
       return res.status(400).json({
         success: false,
@@ -26,7 +21,6 @@ const trackEvent = async (req, res) => {
       });
     }
 
-    // ✅ Event-specific validation
     if (eventType === "PRODUCT_VIEW" && !productId) {
       return res.status(400).json({
         success: false,
@@ -71,9 +65,6 @@ const trackEvent = async (req, res) => {
   }
 };
 
-/**
- * 🔥 BATCH TRACKING (MAIN API)
- */
 const trackBatch = async (req, res) => {
   try {
     const { events } = req.body;
@@ -85,7 +76,6 @@ const trackBatch = async (req, res) => {
       });
     }
 
-    // ✅ Prevent overload (VERY IMPORTANT)
     if (events.length > 1000) {
       return res.status(400).json({
         success: false,

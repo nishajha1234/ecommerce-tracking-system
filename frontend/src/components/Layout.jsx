@@ -28,7 +28,6 @@ export default function Layout({ children }) {
   return (
     <div className="bg-gray-100 min-h-screen">
       
-      {/* Mobile Navbar */}
       <div className="md:hidden flex items-center justify-between px-4 py-3 bg-white border-b shadow-sm">
         <h2 className="text-lg font-semibold text-gray-900">Trackify</h2>
         <button
@@ -39,7 +38,6 @@ export default function Layout({ children }) {
         </button>
       </div>
 
-      {/* Mobile Sidebar */}
       <div
         className={`fixed inset-0 z-50 transition-transform duration-300 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
@@ -76,8 +74,7 @@ export default function Layout({ children }) {
           </div>
         </div>
       </div>
-
-      {/* Desktop Sidebar */}
+      
       <div className="hidden md:flex fixed top-0 left-0 h-screen w-64 bg-white border-r shadow-sm p-6 flex-col justify-between">
         
         <div>
@@ -102,7 +99,6 @@ export default function Layout({ children }) {
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="md:ml-64 p-4 sm:p-6 md:p-8 animate-fadeIn">
         {children}
       </div>

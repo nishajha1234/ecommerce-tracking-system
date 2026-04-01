@@ -1,13 +1,7 @@
 const Event = require("../models/event.model");
 
-/* =========================================================
-   COMMON SORT (STABLE)
-========================================================= */
 const stableSort = { count: -1, _id: 1 };
 
-/* =========================================================
-   1. DASHBOARD STATS (UNCHANGED + SAFE)
-========================================================= */
 exports.getStats = async (req, res) => {
   try {
     const totalEvents = await Event.countDocuments();
@@ -60,9 +54,6 @@ exports.getStats = async (req, res) => {
   }
 };
 
-/* =========================================================
-   2. DROP-OFF (IMPROVED BUT COMPATIBLE)
-========================================================= */
 exports.getDropOff = async (req, res) => {
   try {
     const dropOff = await Event.aggregate([
@@ -110,9 +101,6 @@ exports.getDropOff = async (req, res) => {
   }
 };
 
-/* =========================================================
-   3. SESSION FLOW (LIMITED FOR SAFETY)
-========================================================= */
 exports.getSessionFlow = async (req, res) => {
   try {
     const sessions = await Event.aggregate([
@@ -124,7 +112,7 @@ exports.getSessionFlow = async (req, res) => {
           pages: { $push: "$page" }
         }
       },
-      { $limit: 50 } // ✅ prevent heavy response
+      { $limit: 50 } 
     ]);
 
     res.json(sessions);
@@ -134,9 +122,6 @@ exports.getSessionFlow = async (req, res) => {
   }
 };
 
-/* =========================================================
-   4. FUNNEL (OPTIMIZED - SINGLE QUERY)
-========================================================= */
 exports.getFunnel = async (req, res) => {
   try {
     const steps = ["/home", "/product/1", "/checkout"];
@@ -171,9 +156,6 @@ exports.getFunnel = async (req, res) => {
   }
 };
 
-/* =========================================================
-   5. MAIN ANALYTICS (UPGRADED WITH INSIGHTS)
-========================================================= */
 exports.getAnalytics = async (req, res) => {
   try {
     const [
@@ -186,7 +168,6 @@ exports.getAnalytics = async (req, res) => {
 
       Event.countDocuments(),
 
-      /* TOP PRODUCTS */
       Event.aggregate([
         { $match: { eventType: "PRODUCT_VIEW" } },
         {
@@ -199,7 +180,6 @@ exports.getAnalytics = async (req, res) => {
         { $limit: 5 }
       ]),
 
-      /* ALL PRODUCTS */
       Event.aggregate([
         { $match: { eventType: "PRODUCT_VIEW" } },
         {
@@ -211,7 +191,6 @@ exports.getAnalytics = async (req, res) => {
         { $sort: stableSort }
       ]),
 
-      /* PAGE STATS (FIXED CONSISTENCY) */
       Event.aggregate([
         { $match: { eventType: "TIME_SPENT" } },
         {
@@ -251,9 +230,6 @@ exports.getAnalytics = async (req, res) => {
       ])
     ]);
 
-    /* =====================================================
-       🔥 INSIGHTS LAYER (NO BREAKING CHANGE)
-    ===================================================== */
     const insights = {
       mostViewedProduct: topProducts[0]?._id || null,
       mostEngagingPage: pageStats[0]?._id || null,
@@ -268,7 +244,7 @@ exports.getAnalytics = async (req, res) => {
       allProducts,
       pageStats,
       dropOff,
-      insights // ✅ NEW (SAFE ADDITION)
+      insights
     });
 
   } catch (err) {

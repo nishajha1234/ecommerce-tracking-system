@@ -20,7 +20,6 @@ const eventSchema = new mongoose.Schema(
       index: true
     },
 
-    // ✅ Make page required (important for analytics)
     page: {
       type: String,
       required: true
@@ -47,7 +46,6 @@ const eventSchema = new mongoose.Schema(
       country: String
     },
 
-    // ✅ Keep ONE source of truth
     timestamp: {
       type: Date,
       default: Date.now,
@@ -55,23 +53,16 @@ const eventSchema = new mongoose.Schema(
     }
   },
   {
-    // ❌ REMOVE this to avoid confusion
     timestamps: false
   }
 );
 
-// 🔥 PERFORMANCE INDEXES
-
-// session flow + ordering
 eventSchema.index({ sessionId: 1, timestamp: 1 });
 
-// analytics queries
 eventSchema.index({ eventType: 1, timestamp: -1 });
 
-// product analytics
 eventSchema.index({ productId: 1, eventType: 1 });
 
-// 🔥 OPTIONAL (INTERVIEW BOOST): compound index for dashboard queries
 eventSchema.index({ page: 1, eventType: 1 });
 
 module.exports = mongoose.model("Event", eventSchema);

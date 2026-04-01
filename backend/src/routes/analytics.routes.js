@@ -9,10 +9,8 @@ const {
   getAnalytics
 } = require("../controllers/analytics.controller");
 
-// ✅ MAIN DASHBOARD API (FIXED)
 router.get("/", getAnalytics);
 
-// ✅ Advanced analytics (optional but good)
 router.get("/dropoff", getDropOff);
 router.get("/sessions", getSessionFlow);
 router.get("/funnel", getFunnel);

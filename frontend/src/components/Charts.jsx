@@ -27,8 +27,6 @@ const formatName = (name) => {
 const COLORS = ["#6366f1", "#ec4899", "#f97316", "#ef4444", "#8b5cf6"];
 const PAGE_COLORS = ["#0ea5e9", "#14b8a6", "#84cc16"];
 
-/* ================= PRODUCT CHART ================= */
-
 export function ProductChart({ data = [] }) {
   if (!data.length) return <Empty title="No product data" />;
 
@@ -93,8 +91,6 @@ export function ProductChart({ data = [] }) {
   );
 }
 
-/* ================= PAGE TIME ================= */
-
 export function PageTimeChart({ data = [] }) {
   if (!data.length) return <Empty title="No page time data" />;
 
@@ -157,8 +153,6 @@ export function PageTimeChart({ data = [] }) {
   );
 }
 
-/* ================= DROP-OFF ================= */
-
 export function DropOffChart({ data = [] }) {
   if (!data.length) return <Empty title="No drop-off data" />;
 
@@ -218,8 +212,6 @@ export function DropOffChart({ data = [] }) {
     </ChartCard>
   );
 }
-
-/* ================= UI ================= */
 
 function ChartCard({ children }) {
   return (

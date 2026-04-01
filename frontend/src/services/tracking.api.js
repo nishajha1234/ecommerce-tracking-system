@@ -1,25 +1,21 @@
 import axios from "axios";
 
-/* ================= ENV API ================= */
 const API = import.meta.env.VITE_API_URL;
 
-/* ================= STATE ================= */
 let queue = [];
 let isFlushing = false;
 
-/* ================= SESSION ================= */
 const getSessionId = () => {
   let sessionId = localStorage.getItem("sessionId");
 
   if (!sessionId) {
-    sessionId = crypto.randomUUID(); // ✅ better than Date.now
+    sessionId = crypto.randomUUID(); 
     localStorage.setItem("sessionId", sessionId);
   }
 
   return sessionId;
 };
 
-/* ================= FLUSH ================= */
 const flushQueue = async () => {
   if (queue.length === 0 || isFlushing) return;
 
@@ -30,7 +26,7 @@ const flushQueue = async () => {
 
   try {
     await axios.post(
-      `${API}/api/track/batch`, // ✅ fixed URL
+      `${API}/api/track/batch`,
       { events: eventsToSend },
       {
         headers: {
@@ -41,19 +37,16 @@ const flushQueue = async () => {
   } catch (err) {
     console.error("Flush failed:", err.message);
 
-    // ✅ retry failed events
     queue = [...eventsToSend, ...queue];
   } finally {
     isFlushing = false;
   }
 };
 
-/* ================= INTERVAL ================= */
 if (!window.__trackingInterval) {
   window.__trackingInterval = setInterval(flushQueue, 5000);
 }
 
-/* ================= TAB CLOSE / BACKGROUND ================= */
 window.addEventListener("visibilitychange", () => {
   if (
     document.visibilityState === "hidden" &&
@@ -62,7 +55,7 @@ window.addEventListener("visibilitychange", () => {
   ) {
     try {
       navigator.sendBeacon(
-        `${API}/api/track/batch`, // ✅ fixed URL
+        `${API}/api/track/batch`,
         JSON.stringify({ events: queue })
       );
       queue = [];
@@ -72,7 +65,6 @@ window.addEventListener("visibilitychange", () => {
   }
 });
 
-/* ================= PUBLIC FUNCTION ================= */
 export const trackEvent = (event) => {
   const sessionId = getSessionId();
 

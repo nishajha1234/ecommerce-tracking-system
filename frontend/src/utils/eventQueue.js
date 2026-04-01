@@ -4,7 +4,6 @@ let queue = [];
 let isFlushing = false;
 let started = false;
 
-/* ================= SESSION ================= */
 const getSessionId = () => {
   let sessionId = localStorage.getItem("sessionId");
 
@@ -16,7 +15,6 @@ const getSessionId = () => {
   return sessionId;
 };
 
-/* ================= PUSH EVENT ================= */
 export const pushEvent = (event) => {
   const sessionId = getSessionId();
 
@@ -27,7 +25,6 @@ export const pushEvent = (event) => {
   });
 };
 
-/* ================= SAFE FLUSH ================= */
 export const flushQueue = async () => {
   if (queue.length === 0 || isFlushing) return;
 
@@ -54,7 +51,6 @@ export const flushQueue = async () => {
   }
 };
 
-/* ================= VISIBILITY HANDLER ================= */
 const handleVisibilityChange = () => {
   if (
     document.visibilityState === "hidden" &&
@@ -73,7 +69,6 @@ const handleVisibilityChange = () => {
   }
 };
 
-/* ================= START PROCESSOR ================= */
 export const startQueueProcessor = () => {
   if (started) return;
 

@@ -45,12 +45,10 @@ export default function ProductDetail() {
   </button>
 </div>
 
-        {/* 🔷 MAIN CONTAINER */}
         <div className="bg-white rounded-2xl border shadow-sm p-6 md:p-8">
 
           <div className="grid md:grid-cols-2 gap-10 items-start">
 
-            {/* 🔷 IMAGE (PORTRAIT FIXED) */}
             <div className="w-full max-w-sm mx-auto">
               <div className="aspect-[4/5] w-full overflow-hidden rounded-xl bg-gray-100">
                 <img
@@ -89,7 +87,6 @@ export default function ProductDetail() {
   </ul>
 </div>
 
-                {/* Price */}
                 <p className="mt-9 text-2xl font-semibold text-gray-900">
                   {product.price}
                 </p>
@@ -100,7 +97,6 @@ export default function ProductDetail() {
 
         </div>
 
-        {/* 🔷 EXTRA INFO SECTION (VERY IMPORTANT FOR DEPTH) */}
         <div className="mt-10 grid md:grid-cols-3 gap-6">
 
           <div className="bg-white p-5 rounded-xl border shadow-sm">
